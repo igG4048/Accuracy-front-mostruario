@@ -1,0 +1,548 @@
+/* =========================
+   CARDS SUPERIORES
+========================= */
+
+.cards-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-card {
+    background: var(--surface-2);
+    border: 1px solid var(--borda-suave);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.info-card span {
+    color: var(--texto-secundario);
+    font-size: 11px;
+}
+
+.info-card h3 {
+    margin-top: 10px;
+    color: var(--texto);
+    font-size: 26px;
+}
+
+.info-card small {
+    display: block;
+    margin-top: 8px;
+    font-size: 11px;
+}
+
+.green {
+    color: var(--verde);
+}
+
+.blue {
+    color: var(--primaria);
+}
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 15px;
+}
+
+.aporte-form,
+.aporte-list {
+    background: var(--surface-2);
+    border: 1px solid var(--borda-suave);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.aporte-form h3,
+.aporte-list h3 {
+    color: var(--texto);
+    font-size: 15px;
+}
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+.aporte-form h3 {
+    margin-bottom: 20px;
+}
+
+.aporte-form label {
+    display: block;
+    margin: 15px 0 6px;
+    color: var(--texto-secundario);
+    font-size: 11px;
+}
+
+.aporte-form input,
+.aporte-form select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    outline: none;
+    background: var(--icone-bg);
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.aporte-form input:focus,
+.aporte-form select:focus {
+    border-color: var(--primaria);
+}
+
+.aporte-form select option {
+    background: var(--icone-bg);
+    color: var(--texto);
+}
+
+.quick-values {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.quick-values button {
+    padding: 9px 5px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    background: var(--icone-bg);
+    color: var(--link);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    transition: 0.2s;
+}
+
+.quick-values button:hover,
+.quick-values button.selected {
+    border-color: var(--primaria);
+    background: var(--primaria-suave);
+    color: var(--texto-ativo);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.confirm-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primaria);
+    color: #ffffff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.confirm-btn:hover {
+    background: var(--primaria-forte);
+}
+
+/* =========================
+   CABEÇALHO DA LISTA
+========================= */
+
+.list-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--borda-suave);
+}
+
+.list-header h3 {
+    font-size: 15px;
+}
+
+.list-header > span {
+    color: var(--texto-secundario);
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.list-subtitle {
+    margin-top: 5px;
+    color: var(--texto-fraco);
+    font-size: 11px;
+}
+
+/* =========================
+   ITEM DO APORTE
+========================= */
+
+.aporte-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--borda-item);
+    transition: 0.2s;
+}
+
+.aporte-item:last-child {
+    border-bottom: none;
+}
+
+.aporte-item:hover {
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 8px;
+    background: var(--surface-hover);
+}
+
+.aporte-item .left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.asset-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.green-bg {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--verde);
+}
+
+.orange-bg {
+    background: rgba(249, 115, 22, 0.15);
+    color: #f97316;
+}
+
+.cyan-bg {
+    background: rgba(6, 182, 212, 0.15);
+    color: #06b6d4;
+}
+
+.yellow-bg {
+    background: rgba(234, 179, 8, 0.15);
+    color: var(--amarelo);
+}
+
+.blue-bg {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--primaria);
+}
+
+.aporte-info {
+    min-width: 0;
+}
+
+.aporte-info strong {
+    display: block;
+    overflow: hidden;
+    color: var(--texto-forte);
+    font-size: 13px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.aporte-info p {
+    margin-top: 4px;
+    color: var(--texto-secundario);
+    font-size: 11px;
+}
+
+.aporte-info small {
+    display: block;
+    margin-top: 5px;
+    overflow: hidden;
+    color: var(--texto-muito-fraco);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.aporte-item .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.aporte-value {
+    color: var(--texto);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* =========================
+   BOTÃO EXCLUIR
+========================= */
+
+.delete-btn {
+    width: 31px;
+    height: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 8px;
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--vermelho);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    border-color: var(--vermelho);
+    background: rgba(239, 68, 68, 0.18);
+}
+
+/* =========================
+   INTERRUPTOR
+========================= */
+
+.switch {
+    position: relative;
+    width: 34px;
+    height: 19px;
+    display: inline-block;
+    margin: 0;
+}
+
+.switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.switch span {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: var(--scroll-thumb);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.switch span::before {
+    content: "";
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    left: 3px;
+    top: 3px;
+    border-radius: 50%;
+    background: var(--texto-suave);
+    transition: 0.2s;
+}
+
+.switch input:checked + span {
+    background: var(--primaria-forte);
+}
+
+.switch input:checked + span::before {
+    transform: translateX(15px);
+    background: #ffffff;
+}
+
+/* =========================
+   ESTADO VAZIO
+========================= */
+
+.empty-state {
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--texto-fraco);
+    text-align: center;
+}
+
+.empty-state i {
+    color: var(--primaria);
+    font-size: 34px;
+}
+
+.empty-state strong {
+    color: var(--texto-suave);
+    font-size: 13px;
+}
+
+.empty-state p {
+    color: var(--texto-fraco);
+    font-size: 11px;
+}
+
+/* =========================
+   NOTIFICAÇÃO TOAST
+========================= */
+
+.toast {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 16px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--verde);
+    box-shadow: 0 10px 30px var(--sombra);
+    font-size: 12px;
+}
+
+.toast.show {
+    display: flex;
+}
+
+/* =========================
+   CHUVA DE DINHEIRO
+   (animação ao confirmar
+   um aporte)
+========================= */
+
+.money-rain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 2000;
+}
+
+.money-note {
+    position: absolute;
+    top: -60px;
+
+    width: 48px;
+    height: 26px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 4px;
+
+    background: linear-gradient(135deg, #22c55e, #15803d);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+
+    color: #ecfdf5;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+
+    animation-name: moneyFall;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.money-note::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border: 1px dashed rgba(255, 255, 255, 0.45);
+    border-radius: 2px;
+}
+
+@keyframes moneyFall {
+
+    0% {
+        transform:
+            translateY(-60px)
+            translateX(0)
+            rotate(var(--rot-start));
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translateY(112vh)
+            translateX(var(--drift))
+            rotate(var(--rot-end));
+        opacity: 0;
+    }
+
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 900px) {
+    .cards-top {
+        grid-template-columns: 1fr;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .aporte-item {
+        align-items: flex-start;
+    }
+
+    .aporte-item .right {
+        align-items: flex-end;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .aporte-value {
+        font-size: 12px;
+    }
+
+    .info-card h3 {
+        font-size: 23px;
+    }
+
+    .aporte-form,
+    .aporte-list {
+        padding: 15px;
+    }
+}
