@@ -1,44 +1,53 @@
-/* =========================
-   CARTEIRA
-   Lê os aportes salvos na página de Aportes
-   e monta o gráfico de distribuição.
-========================= */
+(function () {
+"use strict";
 
-const STORAGE_KEY = "accuracy_aportes";
+/* Se o carteiras.js não carregou, avisa na própria página */
 
+if (typeof Carteiras === "undefined") {
 
-/* Cores de cada classe (são dados, ficam fixas) */
-
-const CLASS_COLORS = {
-    "Ações":         "#3b82f6",
-    "Cripto":        "#f59e0b",
-    "Renda Fixa":    "#10b981",
-    "FIIs":          "#eab308",
-    "Internacional": "#8b5cf6",
-    "Outros":        "#64748b"
-};
-
-
-/* De qual classe é cada ativo do formulário */
-
-const ASSET_CLASS = {
-    "PETR4":       "Ações",
-    "Bitcoin":     "Cripto",
-    "CDB Nubank":  "Renda Fixa",
-    "XPML11":      "FIIs"
-};
-
-
-function classOf(item) {
-
-    return (
-        item.category ||
-        ASSET_CLASS[item.asset] ||
-        "Outros"
+    console.error(
+        "Carteiras não foi carregado. Confira se js/carteiras.js existe, " +
+        "está completo (sem estar vazio ou duplicado) e foi salvo."
     );
+
+    const bar = document.getElementById("walletTabs");
+
+    if (bar) {
+        bar.textContent =
+            "Erro: o arquivo js/carteiras.js não foi carregado corretamente (veja o Console, F12).";
+        bar.style.color = "var(--vermelho)";
+        bar.style.fontSize = "13px";
+    }
+
+    return;
 
 }
 
+const $ = (selector) => document.querySelector(selector);
+
+const STORAGE_KEY = "accuracy_aportes";
+
+/* Cores iguais às dos ícones da página de Aportes */
+
+const COLORS = {
+    "Ações": "#22c55e",
+    "Cripto": "#f97316",
+    "Renda Fixa": "#06b6d4",
+    "FIIs": "#eab308",
+    "Outros": "#3b82f6"
+};
+
+const CLASS_OF = {
+    PETR4: "Ações",
+    Bitcoin: "Cripto",
+    "CDB Nubank": "Renda Fixa",
+    XPML11: "FIIs"
+};
+
+
+/* =========================
+   AUXILIARES
+========================= */
 
 function money(value) {
 
@@ -49,21 +58,114 @@ function money(value) {
 
 }
 
+function escapeHtml(text) {
 
-function loadContributions() {
+    const div = document.createElement("div");
+
+    div.textContent = text ?? "";
+
+    return div.innerHTML;
+
+}
+
+function plural(count, singular, pluralWord) {
+
+    return `${count} ${count === 1 ? singular : pluralWord}`;
+
+}
+
+function percent(value, total) {
+
+    const number = total ? (value / total) * 100 : 0;
+
+    return `${number.toFixed(1).replace(".", ",")}%`;
+
+}
+
+function readContributions() {
 
     try {
-
-        const data =
-            JSON.parse(
-                localStorage.getItem(STORAGE_KEY)
-            );
-
-        return Array.isArray(data) ? data : [];
-
-    } catch (error) {
-
+        const list = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return Array.isArray(list) ? list : [];
+    } catch {
         return [];
+    }
+
+}
+
+/* Com só a carteira principal, não há o que alternar */
+
+function effectiveActive() {
+
+    return Carteiras.list().length === 1
+        ? Carteiras.MAIN_ID
+        : Carteiras.getActive();
+
+}
+
+function contributionsOf(walletId) {
+
+    const all = readContributions();
+
+    if (walletId === "all") {
+        return all;
+    }
+
+    return all.filter(
+        item => Carteiras.normalize(item.walletId) === walletId
+    );
+
+}
+
+
+/* =========================
+   ABAS DAS CARTEIRAS
+========================= */
+
+function renderTabs(active) {
+
+    const wallets = Carteiras.list();
+
+    const items = wallets.length > 1
+        ? [{ id: "all", name: "Todas" }, ...wallets]
+        : wallets;
+
+    const tabs = $("#walletTabs");
+
+    tabs.innerHTML = "";
+
+    items.forEach(wallet => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "wallet-tab" + (wallet.id === active ? " active" : "");
+        button.textContent = wallet.name;
+
+        button.addEventListener("click", () => {
+            Carteiras.setActive(wallet.id);
+            render();
+        });
+
+        tabs.appendChild(button);
+
+    });
+
+    const deleteBtn = $("#deleteWalletBtn");
+
+    const custom = active !== "all" && active !== Carteiras.MAIN_ID;
+
+    deleteBtn.hidden = !custom;
+
+    if (custom) {
+
+        const hasContributions = contributionsOf(active).length > 0;
+
+        deleteBtn.disabled = hasContributions;
+
+        deleteBtn.title = hasContributions
+            ? "Só é possível excluir carteiras sem aportes."
+            : "Excluir esta carteira";
 
     }
 
@@ -71,317 +173,187 @@ function loadContributions() {
 
 
 /* =========================
-   AGRUPAR POR CLASSE
+   RENDERIZAR
 ========================= */
 
-function groupByClass(contributions) {
+function render() {
 
-    const totals = {};
+    const active = effectiveActive();
 
-    let total = 0;
+    renderTabs(active);
+
+    const items = contributionsOf(active);
+
+    const total = items.reduce(
+        (sum, item) => sum + (Number(item.amount) || 0),
+        0
+    );
+
+    $("#totalEquity").textContent = money(total);
+    $("#totalInvested").textContent = money(total);
+
+    $("#equityHint").textContent = active === "all"
+        ? "Soma dos aportes de todas as carteiras"
+        : `Soma dos aportes • ${Carteiras.nameOf(active)}`;
 
 
-    contributions.forEach(item => {
+    /* Agrupa por ativo e por classe */
+
+    const assets = {};
+    const classes = {};
+
+    items.forEach(item => {
+
+        const category = item.category || CLASS_OF[item.asset] || "Outros";
 
         const value = Number(item.amount) || 0;
 
-        if (value <= 0) {
-            return;
-        }
+        const asset = assets[item.asset] || (assets[item.asset] = {
+            name: item.asset,
+            category,
+            count: 0,
+            total: 0
+        });
 
-        const name = classOf(item);
+        asset.count++;
+        asset.total += value;
 
-        totals[name] = (totals[name] || 0) + value;
-
-        total += value;
-
-    });
-
-
-    const list =
-        Object.keys(totals)
-            .map(name => ({
-                name,
-                value: totals[name],
-                percent: (totals[name] / total) * 100
-            }))
-            .sort((a, b) => b.value - a.value);
-
-
-    return { list, total };
-
-}
-
-
-/* =========================
-   AGRUPAR POR ATIVO
-========================= */
-
-function groupByAsset(contributions) {
-
-    const totals = {};
-
-    let total = 0;
-
-
-    contributions.forEach(item => {
-
-        const value = Number(item.amount) || 0;
-
-        if (value <= 0) {
-            return;
-        }
-
-        if (!totals[item.asset]) {
-
-            totals[item.asset] = {
-                asset: item.asset,
-                className: classOf(item),
-                count: 0,
-                value: 0
-            };
-
-        }
-
-        totals[item.asset].count += 1;
-        totals[item.asset].value += value;
-
-        total += value;
+        classes[category] = (classes[category] || 0) + value;
 
     });
 
-
-    const list =
-        Object.values(totals)
-            .sort((a, b) => b.value - a.value);
+    const rows = Object.values(assets).sort((a, b) => b.total - a.total);
 
 
-    return { list, total };
+    /* Tabela */
 
-}
+    $("#assetsCount").textContent = plural(rows.length, "ativo", "ativos");
 
-
-/* =========================
-   GRÁFICO DE PIZZA
-========================= */
-
-function renderChart(groups) {
-
-    const circle = document.getElementById("distributionChart");
-    const legend = document.getElementById("distributionLegend");
-
-    if (!circle || !legend) {
-        return;
-    }
-
-
-    legend.innerHTML = "";
-
-
-    if (!groups.list.length) {
-
-        circle.style.background = "var(--borda)";
-
-        legend.innerHTML = `
-            <div class="legend-empty">
-                Faça um aporte para ver a distribuição.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    /* Monta as fatias do conic-gradient */
-
-    const stops = [];
-
-    let start = 0;
-
-
-    groups.list.forEach((group, index) => {
-
-        const end =
-            index === groups.list.length - 1
-                ? 100
-                : start + group.percent;
-
-        const color =
-            CLASS_COLORS[group.name] ||
-            CLASS_COLORS["Outros"];
-
-        stops.push(
-            `${color} ${start.toFixed(2)}% ${end.toFixed(2)}%`
-        );
-
-        start = end;
-
-    });
-
-
-    circle.style.background =
-        `conic-gradient(${stops.join(", ")})`;
-
-
-    /* Legenda */
-
-    groups.list.forEach(group => {
-
-        const color =
-            CLASS_COLORS[group.name] ||
-            CLASS_COLORS["Outros"];
-
-        const row = document.createElement("div");
-
-        row.innerHTML = `
-            <span class="legend-name">
-                <i class="legend-dot"
-                   style="background:${color}"></i>
-                ${group.name}
-            </span>
-
-            <span>${group.percent.toFixed(1).replace(".", ",")}%</span>
-        `;
-
-        legend.appendChild(row);
-
-    });
-
-}
-
-
-/* =========================
-   TABELA DE ATIVOS
-========================= */
-
-function renderTable(assets, total) {
-
-    const body = document.getElementById("assetsBody");
-    const badge = document.getElementById("assetsCount");
-
-    if (!body) {
-        return;
-    }
-
-
-    body.innerHTML = "";
-
-
-    if (badge) {
-
-        badge.textContent =
-            `${assets.length} ${
-                assets.length === 1 ? "ativo" : "ativos"
-            }`;
-
-    }
-
-
-    if (!assets.length) {
-
-        body.innerHTML = `
+    $("#assetsBody").innerHTML = rows.length
+        ? rows.map(asset => `
             <tr>
-                <td colspan="5" class="table-empty">
-                    Nenhum aporte registrado ainda.
-                </td>
+                <td>${escapeHtml(asset.name)}</td>
+                <td>${escapeHtml(asset.category)}</td>
+                <td>${asset.count}</td>
+                <td>${money(asset.total)}</td>
+                <td>${percent(asset.total, total)}</td>
             </tr>
-        `;
+        `).join("")
+        : `<tr><td colspan="5" class="table-empty">Nenhum investimento nesta carteira.</td></tr>`;
+
+
+    /* Gráfico de distribuição */
+
+    const circle = $("#distributionChart");
+    const legend = $("#distributionLegend");
+
+    if (!total) {
+
+        circle.style.background = "";
+
+        legend.innerHTML = `<p class="legend-empty">Sem dados para exibir.</p>`;
 
         return;
+
     }
 
+    const entries = Object.entries(classes).sort((a, b) => b[1] - a[1]);
 
-    assets.forEach(item => {
+    let accumulated = 0;
 
-        const percent = (item.value / total) * 100;
+    const stops = entries.map(([category, value]) => {
 
-        const color =
-            CLASS_COLORS[item.className] ||
-            CLASS_COLORS["Outros"];
+        const start = (accumulated / total) * 100;
 
-        const row = document.createElement("tr");
+        accumulated += value;
 
-        row.innerHTML = `
-            <td>${item.asset}</td>
+        const end = (accumulated / total) * 100;
 
-            <td>
-                <span class="legend-dot"
-                      style="background:${color}"></span>
-                ${item.className}
-            </td>
-
-            <td>${item.count}</td>
-
-            <td>${money(item.value)}</td>
-
-            <td>${percent.toFixed(1).replace(".", ",")}%</td>
-        `;
-
-        body.appendChild(row);
+        return `${COLORS[category] || COLORS.Outros} ${start}% ${end}%`;
 
     });
 
-}
+    circle.style.background = `conic-gradient(${stops.join(", ")})`;
 
-
-/* =========================
-   CARDS
-========================= */
-
-function renderCards(total) {
-
-    const invested = document.getElementById("totalInvested");
-    const equity = document.getElementById("totalEquity");
-
-    if (invested) {
-        invested.textContent = money(total);
-    }
-
-    if (equity) {
-        equity.textContent = money(total);
-    }
+    legend.innerHTML = entries.map(([category, value]) => `
+        <div>
+            <span class="legend-name">
+                <span class="legend-dot" style="background:${COLORS[category] || COLORS.Outros}"></span>
+                ${escapeHtml(category)}
+            </span>
+            <span>${percent(value, total)}</span>
+        </div>
+    `).join("");
 
 }
 
 
 /* =========================
-   ATUALIZAR TUDO
+   NOVA CARTEIRA / EXCLUIR
 ========================= */
 
-function updateWallet() {
+$("#newWalletBtn").addEventListener("click", async () => {
 
-    const contributions = loadContributions();
+    const wallet = await Carteiras.promptNewWallet();
 
-    const byClass = groupByClass(contributions);
-    const byAsset = groupByAsset(contributions);
+    if (wallet) {
 
-    renderChart(byClass);
-    renderTable(byAsset.list, byAsset.total);
-    renderCards(byClass.total);
+        Carteiras.setActive(wallet.id);
 
-}
+        render();
+
+    }
+
+});
+
+$("#deleteWalletBtn").addEventListener("click", () => {
+
+    const id = Carteiras.getActive();
+
+    if (id === "all" || id === Carteiras.MAIN_ID) {
+        return;
+    }
+
+    if (!confirm(`Excluir a carteira "${Carteiras.nameOf(id)}"?`)) {
+        return;
+    }
+
+    Carteiras.remove(id);
+
+    render();
+
+});
 
 
-updateWallet();
+/* =========================
+   DATA NO TOPO
+========================= */
+
+$("#currentDate").textContent =
+    new Date().toLocaleDateString("pt-BR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
 
 
-/* Atualiza se o aporte for feito em outra aba */
+/* =========================
+   ATUALIZA SE OUTRA ABA MEXER
+========================= */
 
 window.addEventListener("storage", event => {
 
-    if (event.key === STORAGE_KEY) {
-        updateWallet();
+    if (
+        event.key === STORAGE_KEY ||
+        event.key === "accuracy_carteiras"
+    ) {
+        render();
     }
 
 });
 
 
-/* Atualiza ao voltar para a página */
+render();
 
-document.addEventListener("visibilitychange", () => {
-
-    if (!document.hidden) {
-        updateWallet();
-    }
-
-});
+})();

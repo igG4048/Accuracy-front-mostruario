@@ -1,8 +1,4 @@
-<?php
 
-include('configs/conexao.php');
-
-?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -57,22 +53,22 @@ include('configs/conexao.php');
 
             <nav class="menu">
 
-                <a href="dashboard.html">
+                <a href="dashboard.php">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="carteira.html">
+                <a href="carteira.php">
                     <i class="bi bi-wallet2"></i>
                     <span>Carteira</span>
                 </a>
 
-                <a href="historico.html">
+                <a href="historico.php">
                     <i class="bi bi-clock-history"></i>
                     <span>Histórico</span>
                 </a>
 
-                <a href="aportes.html">
+                <a href="aportes.php">
                     <i class="bi bi-cash-stack"></i>
                     <span>Aportes</span>
                 </a>
@@ -82,7 +78,7 @@ include('configs/conexao.php');
                     <span>Relatórios</span>
                 </a>
 
-                <a href="Cursos.html">
+                <a href="Cursos.php">
                     <i class="bi bi-mortarboard"></i>
                     <span>Cursos</span>
                 </a>
@@ -169,7 +165,7 @@ include('configs/conexao.php');
 
                         <div class="notification-footer">
 
-                            <a href="historico.html">
+                            <a href="#">
                                 Ver todas as notificações
                             </a>
 
@@ -386,25 +382,7 @@ include('configs/conexao.php');
                 </div>
 
 
-                <div class="info-row">
-
-                    <div class="info-icon">
-
-                        <i class="bi bi-bell"></i>
-
-                    </div>
-
-                    <div class="info-content">
-
-                        <span>Notificações</span>
-
-                        <p>Gerencie suas notificações</p>
-
-                    </div>
-
-                    <i class="bi bi-chevron-right arrow"></i>
-
-                </div>
+                
 
 
                 <!-- LINHA DE APARÊNCIA — CLICÁVEL, TROCA O TEMA -->
@@ -605,6 +583,75 @@ include('configs/conexao.php');
             </div>
 
             <input type="file" id="avatarFileInput" accept="image/*" hidden>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL - EDITAR PERFIL
+========================= -->
+
+<div class="profile-edit-modal-overlay" id="profileEditModalOverlay">
+
+    <div class="profile-edit-modal">
+
+        <div class="avatar-modal-header">
+            <h3>Editar perfil</h3>
+            <button class="avatar-modal-close" id="profileEditModalClose" type="button" aria-label="Fechar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="profile-edit-modal-body">
+
+            <div class="profile-edit-icon" id="profileEditIcon">
+                <img id="profileEditAvatarImg" class="hidden" alt="Foto de perfil">
+                <i class="bi bi-person-circle" id="profileEditIconPlaceholder"></i>
+            </div>
+
+            <form id="profileEditForm" novalidate>
+
+                <div class="profile-edit-field">
+                    <label for="editNome">Nome</label>
+                    <input type="text" id="editNome" name="nome" required>
+                </div>
+
+                <div class="profile-edit-field">
+                    <label for="editEmail">E-mail</label>
+                    <input type="email" id="editEmail" name="email" required>
+                    <span class="profile-edit-error hidden" id="editEmailError">
+                        E-mail inválido
+                    </span>
+                </div>
+
+                <div class="profile-edit-field">
+                    <label for="editTelefone">Telefone</label>
+                    <input type="tel" id="editTelefone" name="telefone" placeholder="(11) 98765-4321">
+                </div>
+
+                <div class="profile-edit-field">
+                    <label for="editCpf">CPF</label>
+                    <input type="text" id="editCpf" name="cpf" disabled>
+                    <span class="profile-edit-lock-hint">
+                        <i class="bi bi-lock"></i> CPF não pode ser alterado
+                    </span>
+                </div>
+
+                <div class="avatar-modal-actions">
+                    <button class="avatar-action-btn primary" type="submit">
+                        <i class="bi bi-check-circle"></i>
+                        Salvar alterações
+                    </button>
+                    <button class="avatar-action-btn" type="button" id="cancelProfileEditBtn">
+                        Cancelar
+                    </button>
+                </div>
+
+            </form>
 
         </div>
 

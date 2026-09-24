@@ -315,3 +315,218 @@ saveAvatarBtn.addEventListener("click", () => {
     closeModal();
 
 });
+
+
+/* =========================
+   EDITAR PERFIL
+========================= */
+
+const PROFILE_KEY = "accuracy_profile_data";
+
+const editBtn = document.querySelector(".edit-btn");
+
+const profileEditOverlay = document.getElementById("profileEditModalOverlay");
+const profileEditClose = document.getElementById("profileEditModalClose");
+const cancelProfileEditBtn = document.getElementById("cancelProfileEditBtn");
+const profileEditForm = document.getElementById("profileEditForm");
+
+const editNome = document.getElementById("editNome");
+const editEmail = document.getElementById("editEmail");
+const editTelefone = document.getElementById("editTelefone");
+const editCpf = document.getElementById("editCpf");
+const editEmailError = document.getElementById("editEmailError");
+
+const profileEditAvatarImg = document.getElementById("profileEditAvatarImg");
+const profileEditIconPlaceholder = document.getElementById("profileEditIconPlaceholder");
+
+const navUserName = document.querySelector(".user-info strong");
+const profileCardName = document.querySelector(".profile-card h2");
+const profileCardEmail = document.querySelector(".profile-email");
+
+
+/* =========================
+   DADOS PADRÃO / SALVOS
+========================= */
+
+function getDefaultProfile() {
+
+    return {
+        nome: profileCardName ? profileCardName.textContent.trim() : "",
+        email: profileCardEmail ? profileCardEmail.textContent.trim() : "",
+        telefone: "(11) 98765-4321",
+        cpf: "123.456.789-01"
+    };
+
+}
+
+
+function loadProfile() {
+
+    const saved = localStorage.getItem(PROFILE_KEY);
+
+    if (saved) {
+
+        try {
+            return JSON.parse(saved);
+        } catch (error) {
+            return getDefaultProfile();
+        }
+
+    }
+
+    return getDefaultProfile();
+
+}
+
+
+function applyProfile(data) {
+
+    if (navUserName) navUserName.textContent = data.nome;
+    if (profileCardName) profileCardName.textContent = data.nome;
+    if (profileCardEmail) profileCardEmail.textContent = data.email;
+
+    document.querySelectorAll(".info-row .info-content").forEach(content => {
+
+        const label = content.querySelector("span");
+        const value = content.querySelector("p");
+
+        if (!label || !value) return;
+
+        if (label.textContent.trim() === "Nome") value.textContent = data.nome;
+        if (label.textContent.trim() === "E-mail") value.textContent = data.email;
+        if (label.textContent.trim() === "Telefone") value.textContent = data.telefone;
+        if (label.textContent.trim() === "CPF") value.textContent = data.cpf;
+
+    });
+
+}
+
+
+applyProfile(loadProfile());
+
+
+/* =========================
+   VALIDAÇÃO DE E-MAIL
+========================= */
+
+function isValidEmail(value) {
+
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return regex.test(value.trim());
+
+}
+
+
+function clearEmailError() {
+
+    editEmail.classList.remove("input-error");
+    editEmailError.classList.add("hidden");
+
+}
+
+
+function showEmailError() {
+
+    editEmail.classList.add("input-error");
+    editEmailError.classList.remove("hidden");
+
+}
+
+
+editEmail.addEventListener("input", clearEmailError);
+
+
+/* =========================
+   ABRIR / FECHAR MODAL
+   DE EDITAR PERFIL
+========================= */
+
+function openProfileEditModal() {
+
+    const data = loadProfile();
+
+    editNome.value = data.nome;
+    editEmail.value = data.email;
+    editTelefone.value = data.telefone;
+    editCpf.value = data.cpf;
+
+    clearEmailError();
+
+    const savedAvatarPhoto = localStorage.getItem(AVATAR_KEY);
+
+    if (savedAvatarPhoto) {
+
+        profileEditAvatarImg.src = savedAvatarPhoto;
+        profileEditAvatarImg.classList.remove("hidden");
+        profileEditIconPlaceholder.classList.add("hidden");
+
+    } else {
+
+        profileEditAvatarImg.classList.add("hidden");
+        profileEditIconPlaceholder.classList.remove("hidden");
+
+    }
+
+    profileEditOverlay.classList.add("show");
+
+}
+
+
+function closeProfileEditModal() {
+
+    profileEditOverlay.classList.remove("show");
+
+}
+
+
+if (editBtn) {
+    editBtn.addEventListener("click", openProfileEditModal);
+}
+
+profileEditClose.addEventListener("click", closeProfileEditModal);
+cancelProfileEditBtn.addEventListener("click", closeProfileEditModal);
+
+profileEditOverlay.addEventListener("click", event => {
+
+    if (event.target === profileEditOverlay) {
+        closeProfileEditModal();
+    }
+
+});
+
+
+/* =========================
+   SALVAR ALTERAÇÕES
+========================= */
+
+profileEditForm.addEventListener("submit", event => {
+
+    event.preventDefault();
+
+    if (!isValidEmail(editEmail.value)) {
+
+        showEmailError();
+
+        editEmail.focus();
+
+        return;
+
+    }
+
+    clearEmailError();
+
+    const updated = {
+        nome: editNome.value.trim(),
+        email: editEmail.value.trim(),
+        telefone: editTelefone.value.trim(),
+        cpf: editCpf.value
+    };
+
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
+
+    applyProfile(updated);
+
+    closeProfileEditModal();
+
+});

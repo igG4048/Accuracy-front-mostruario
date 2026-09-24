@@ -8,7 +8,7 @@
 
     <title>Cadastro - InvestFlow</title>
 
-    <link rel="stylesheet" href="css\cadastro.css">
+    <link rel="stylesheet" href="css/cadastro.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -23,7 +23,7 @@
         <div class="logo">
 
             <div class="logo-icon">
-                
+
             </div>
 
             <span>Accuracy</span>
@@ -102,44 +102,48 @@
             </span>
 
             <div class="field">
-                <label>Nome Completo</label>
-                <input type="text" name="nomeCadastro" placeholder="João da Silva">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" name="nomeCadastro" placeholder="João da Silva">
             </div>
 
             <div class="field">
-                <label>E-mail</label>
-                <input type="email" name="emailCadastro" placeholder="seu@email.com">
-
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="emailCadastro" placeholder="seu@email.com">
             </div>
 
             <div class="row">
 
                 <div class="field">
-
-                    <label>Senha</label>
-
+                    <label for="senha">Senha</label>
                     <input
-
                         type="password"
-                        placeholder="Mín. 8 caracteres"
-                        name="senhaCadastro">
-
+                        id="senha"
+                        name="senhaCadastro"
+                        placeholder="Mín. 8 caracteres">
                 </div>
 
                 <div class="field">
-
-                    <label>telefone</label>
-
+                    <label for="telefone">Telefone</label>
                     <input
-                        type="number"
-                        placeholder="Telefone"
-                        name="telefoneCadastro">
-
-                        <label for="">CPF</label>
-                        <input type="number" name="cpfCadastro">
-
+                        type="text"
+                        id="telefone"
+                        name="telefoneCadastro"
+                        placeholder="(11) 98765-4321"
+                        inputmode="numeric"
+                        maxlength="15">
                 </div>
 
+            </div>
+
+            <div class="field">
+                <label for="cpf">CPF</label>
+                <input
+                    type="text"
+                    id="cpf"
+                    name="cpfCadastro"
+                    placeholder="000.000.000-00"
+                    inputmode="numeric"
+                    maxlength="14">
             </div>
 
             <label class="check">
@@ -180,86 +184,51 @@
 
 </div>
 
+<script>
+
+    /* =========================
+       MÁSCARA DE TELEFONE
+       (11) 98765-4321  ou  (11) 8765-4321
+    ========================= */
+
+    function mascaraTelefone(valor) {
+
+        const n = valor.replace(/\D/g, "").slice(0, 11);
+
+        if (n.length === 0) return "";
+        if (n.length <= 2)  return `(${n}`;
+        if (n.length <= 6)  return `(${n.slice(0, 2)}) ${n.slice(2)}`;
+        if (n.length <= 10) return `(${n.slice(0, 2)}) ${n.slice(2, 6)}-${n.slice(6)}`;
+
+        return `(${n.slice(0, 2)}) ${n.slice(2, 7)}-${n.slice(7)}`;
+    }
+
+
+    /* =========================
+       MÁSCARA DE CPF
+       123.456.789-01
+    ========================= */
+
+    function mascaraCpf(valor) {
+
+        const n = valor.replace(/\D/g, "").slice(0, 11);
+
+        return n
+            .replace(/^(\d{3})(\d)/, "$1.$2")
+            .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+            .replace(/\.(\d{3})(\d)/, ".$1-$2");
+    }
+
+
+    document.getElementById("telefone").addEventListener("input", function (e) {
+        e.target.value = mascaraTelefone(e.target.value);
+    });
+
+    document.getElementById("cpf").addEventListener("input", function (e) {
+        e.target.value = mascaraCpf(e.target.value);
+    });
+
+</script>
+
 </body>
 </html>
-<?php
-require_once 'configs/conexao.php';
-
-if($_SERVER["REQUEST_METHOD"]== "POST"){
-     
-    $nome = $_POST["nomeCadastro"];
-    $email = $_POST["emailCadastro"];
-    $senha = $_POST["senhaCadastro"];
-    $cpf = $_POST["cpfCadastro"];
-    $telefone = $_POST["telefoneCadastro"];
-    
-    try{
-        // primeiro verificar se o email ja existe
-
-        $verificar = "SELECT * FROM usuarios_info WHERE email_usuario = ? ";
-
-        $stmt = $conexao->prepare($verificar);
-        $stmt->bindParam(1,$email);
-        $stmt->execute();
-
-        if($stmt->rowCount() > 0){
-            
-            
-        } else{
-            // se o email nao existir no banco cadastra o usuario
-            $sql = "INSERT INTO usuarios_info
-            (email_usuario, senha_usuario, nome_usuario, telefone_usuario, cpf_usuario)
-            VALUES(?, ?, ?, ?, ?)";
-
-            $stmt = $conexao->prepare($sql);
-
-            $stmt->bindParam(1,$email);
-            $stmt->bindParam(2,$senha);
-            $stmt->bindParam(3,$nome);
-            $stmt->bindParam(4,$telefone);
-            $stmt->bindParam(5,$cpf);
-            if($stmt->execute()){
-                
-
-                header("Location: login.php");
-                exit;
-            }
-        
-
-        }
-    }
-      catch(PDOException $erro){
-
-        echo "Erro: ".$erro->getMessage();
-
-    }
-}
-
-
-
-?>
-
-
-
-
-     
- 
-         
-    
-
-    
-        
-    
-    
-
-
-  
-             
-
-
-        
-    
-
-  
-
-

@@ -7,8 +7,9 @@
 
     <title>Carteira - Accuracy</title>
 
-    <link rel="stylesheet" href="css/tema.css">
+    <link rel="stylesheet" href="css/Tema.css">
     <link rel="stylesheet" href="css/carteira.css">
+    <link rel="stylesheet" href="css/carteiras.css">
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
@@ -20,7 +21,7 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
 
-    <script src="js/tema.js"></script>
+    <script src="js/Tema.js"></script>
     <script src="js/avatar-global.js"></script>
 </head>
 
@@ -32,7 +33,7 @@
 
         <div class="top">
 
-            <a href="dashboard.html" class="logo">
+            <a href="dashboard.php" class="logo">
                 <div class="logo-box">
                     <i class="bi bi-graph-up"></i>
                 </div>
@@ -44,22 +45,22 @@
 
             <nav class="menu">
 
-                <a href="dashboard.html">
+                <a href="dashboard.php">
                     <i class="bi bi-grid-1x2-fill"></i>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="carteira.html" class="active">
+                <a href="carteira.php" class="active">
                     <i class="bi bi-wallet2"></i>
                     <span>Carteira</span>
                 </a>
 
-                <a href="historico.html">
+                <a href="historico.php">
                     <i class="bi bi-clock-history"></i>
                     <span>Histórico</span>
                 </a>
 
-                <a href="aportes.html">
+                <a href="aportes.php">
                     <i class="bi bi-plus-circle"></i>
                     <span>Aportes</span>
                 </a>
@@ -69,12 +70,12 @@
                     <span>Relatórios</span>
                 </a>
 
-                <a href="Cursos.html">
+                <a href="Cursos.php">
                     <i class="bi bi-mortarboard"></i>
                     <span>Cursos</span>
                 </a>
 
-                <a href="perfil.html">
+                <a href="perfil.php">
                     <i class="bi bi-person"></i>
                     <span>Perfil</span>
                 </a>
@@ -137,7 +138,7 @@
                         </div>
 
                         <div class="notification-footer">
-                            <a href="historico.html">
+                            <a href="historico.php">
                                 Ver todas as notificações
                             </a>
                         </div>
@@ -150,12 +151,12 @@
 
 
             <div class="user">
-                <a href="perfil.html">
+                <a href="perfil.php">
                     <div class="avatar">N</div>
                 </a>
 
                 <div class="user-info">
-                    <a href="perfil.html">
+                    <a href="perfil.php">
                         <strong>Nome da pessoa</strong>
                     </a>
 
@@ -178,12 +179,47 @@
 
         </header>
 
+
+        <!-- =========================
+             CARTEIRAS
+        ========================== -->
+
+        <section class="wallet-bar">
+
+            <div class="wallet-tabs" id="walletTabs"></div>
+
+            <div class="wallet-actions">
+
+                <button
+                    class="wallet-btn danger"
+                    id="deleteWalletBtn"
+                    type="button"
+                    hidden
+                >
+                    <i class="bi bi-trash"></i>
+                    Excluir carteira
+                </button>
+
+                <button
+                    class="wallet-btn primary"
+                    id="newWalletBtn"
+                    type="button"
+                >
+                    <i class="bi bi-plus-lg"></i>
+                    Nova carteira
+                </button>
+
+            </div>
+
+        </section>
+
+
         <section class="cards">
 
             <div class="card highlight">
                 <h3>PATRIMÔNIO TOTAL</h3>
                 <p id="totalEquity">R$ 0,00</p>
-                <span>Soma dos aportes</span>
+                <span id="equityHint">Soma dos aportes</span>
             </div>
 
             <div class="card">
@@ -278,7 +314,8 @@ markRead.addEventListener("click", function () {
 });
 </script>
 
-<script src="js/carteira.js"></script>
+<script src="js/carteiras.js"></script>
+<script src="js/carteira.js?v=2"></script>
 
 </body>
 </html>

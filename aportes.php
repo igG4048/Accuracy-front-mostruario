@@ -8,14 +8,17 @@
     <title>Aportes - Accuracy</title>
 
     <!-- Tema (precisa vir antes de tudo) -->
-    <link rel="stylesheet" href="css/tema.css">
+    <link rel="stylesheet" href="css/Tema.css">
 
     <!-- Primeiro o CSS principal do Dashboard -->
     <link rel="stylesheet" href="css/dashboard.css">
 
     <!-- Depois o CSS específico desta página -->
     <link rel="stylesheet" href="css/aportes.css">
-    
+
+    <!-- Estilos das janelas de carteira -->
+    <link rel="stylesheet" href="css/carteiras.css">
+
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
@@ -23,7 +26,7 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <script src="js/tema.js"></script>
+    <script src="js/Tema.js"></script>
     <script src="js/avatar-global.js"></script>
 </head>
 
@@ -35,7 +38,7 @@
 
         <div class="top">
 
-            <a href="dashboard.html" class="logo">
+            <a href="dashboard.php" class="logo">
                 <div class="logo-box">
                     <i class="bi bi-graph-up"></i>
                 </div>
@@ -47,22 +50,22 @@
 
             <nav class="menu">
 
-                <a href="dashboard.html">
+                <a href="dashboard.php">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="carteira.html">
+                <a href="carteira.php">
                     <i class="bi bi-wallet2"></i>
                     <span>Carteira</span>
                 </a>
 
-                <a href="historico.html">
+                <a href="historico.php">
                     <i class="bi bi-clock-history"></i>
                     <span>Histórico</span>
                 </a>
 
-                <a href="aportes.html" class="active">
+                <a href="aportes.php" class="active">
                     <i class="bi bi-plus-circle"></i>
                     <span>Aportes</span>
                 </a>
@@ -72,12 +75,12 @@
                     <span>Relatórios</span>
                 </a>
 
-                <a href="Cursos.html">
+                <a href="Cursos.php">
                     <i class="bi bi-mortarboard"></i>
                     <span>Cursos</span>
                 </a>
 
-                <a href="perfil.html">
+                <a href="perfil.php">
                     <i class="bi bi-person"></i>
                     <span>Perfil</span>
                 </a>
@@ -123,7 +126,7 @@
                         </div>
 
                         <div class="notification-footer">
-                            <a href="historico.html">
+                            <a href="historico.php">
                                 Ver todas as notificações
                             </a>
                         </div>
@@ -136,12 +139,12 @@
 
             <div class="user">
 
-                <a href="perfil.html">
+                <a href="perfil.php">
                     <div class="avatar">N</div>
                 </a>
 
                 <div class="user-info">
-                    <a href="perfil.html">
+                    <a href="perfil.php">
                         <strong>Nome da pessoa</strong>
                     </a>
 
@@ -319,7 +322,7 @@
                 <div class="empty-state" id="emptyState">
 
                     <i class="bi bi-wallet2"></i>
-                        
+
                     <strong>
                         Nenhum aporte realizado
                     </strong>
@@ -343,7 +346,9 @@
     <span id="toastMessage"></span>
 </div>
 
-<script src="js/Aportes.js"></script>
+<!-- ?v=2 força o navegador a baixar a versão nova do arquivo -->
+<script src="js/carteiras.js"></script>
+<script src="js/Aportes.js?v=3"></script>
 
 <script>
     const notificationBtn = document.getElementById("notificationBtn");

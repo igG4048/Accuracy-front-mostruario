@@ -19,9 +19,92 @@ const monthlyAverage = $("#monthlyAverage");
 const nextContribution = $("#nextContribution");
 
 const STORAGE_KEY = "accuracy_aportes";
+const HISTORY_KEY = "accuracy_historico";
 
 let contributions =
     JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+
+/* =========================
+   HISTÓRICO
+   (registra cada aporte
+   adicionado ou removido)
+========================= */
+
+function historyEntry(action, item, timestamp = new Date().toISOString()) {
+
+    return {
+
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+
+        action,
+
+        contributionId: item.id,
+
+        asset: item.asset,
+
+        category: item.category,
+
+        type: item.type,
+
+        amount: item.amount,
+
+        date: item.date,
+
+        recurrence: item.recurrence,
+
+        recurrenceDay: item.recurrenceDay,
+
+        observation: item.observation,
+
+        timestamp
+
+    };
+
+}
+
+
+function logHistory(action, item) {
+
+    let history;
+
+    try {
+        history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+    } catch {
+        history = [];
+    }
+
+    history.push(historyEntry(action, item));
+
+    localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(history)
+    );
+
+}
+
+
+/* Aportes que já existiam antes do histórico */
+
+if (
+    localStorage.getItem(HISTORY_KEY) === null &&
+    contributions.length
+) {
+
+    localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(
+            contributions.map(item =>
+                historyEntry(
+                    "added",
+                    item,
+                    new Date(item.id).toISOString()
+                )
+            )
+        )
+    );
+
+}
 
 
 /* =========================
@@ -327,7 +410,7 @@ recurrence.addEventListener(
 
 $("#confirmBtn").addEventListener(
     "click",
-    () => {
+    async () => {
 
         const value = getAmount();
 
@@ -373,6 +456,36 @@ $("#confirmBtn").addEventListener(
         }
 
 
+        /*
+           Se existir mais de uma carteira,
+           pergunta em qual colocar o aporte
+        */
+
+        let walletId = "principal";
+
+        if (typeof Carteiras !== "undefined") {
+
+            walletId = Carteiras.MAIN_ID;
+
+            if (Carteiras.list().length > 1) {
+
+                const active = Carteiras.getActive();
+
+                const chosen = await Carteiras.askWallet({
+                    selected: active === "all" ? Carteiras.MAIN_ID : active
+                });
+
+                if (!chosen) {
+                    return;
+                }
+
+                walletId = chosen;
+
+            }
+
+        }
+
+
         const contribution = {
 
             id: Date.now(),
@@ -380,6 +493,8 @@ $("#confirmBtn").addEventListener(
             asset: asset.value,
 
             category: classOf(asset.value),
+
+            walletId,
 
             amount: value,
 
@@ -401,6 +516,8 @@ $("#confirmBtn").addEventListener(
 
 
         contributions.push(contribution);
+
+        logHistory("added", contribution);
 
         save();
 
@@ -514,6 +631,39 @@ function recurrenceText(item) {
 
 
 /* =========================
+   NOME DA CARTEIRA NA LISTA
+========================= */
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+function walletLabel(item) {
+
+    if (
+        typeof Carteiras === "undefined" ||
+        Carteiras.list().length < 2
+    ) {
+        return "";
+    }
+
+    const name = Carteiras.nameOf(
+        Carteiras.normalize(item.walletId)
+    );
+
+    return ` • ${escapeHtml(name)}`;
+
+}
+
+
+/* =========================
    RENDERIZAR APORTES
 ========================= */
 
@@ -526,6 +676,9 @@ function render() {
 
         emptyState.style.display =
             "block";
+
+        contributionCount.textContent =
+            "0 aportes";
 
         updateCards();
 
@@ -581,7 +734,7 @@ function render() {
 
                     <p>
                         ${item.type}
-                        • ${formatDate(item.date)}
+                        • ${formatDate(item.date)}${walletLabel(item)}
                     </p>
 
                     <small>
@@ -776,6 +929,8 @@ contributionList.addEventListener(
                     contribution.id !== id
             );
 
+
+        logHistory("removed", item);
 
         save();
 

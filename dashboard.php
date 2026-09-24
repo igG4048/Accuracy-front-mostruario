@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Histórico - Accuracy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="css/tema.css">
-<link rel="stylesheet" href="css/historico.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<script src="js/tema.js"></script>
-<script src="js/avatar-global.js"></script>
+    <title>Dashboard - Accuracy</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/avatar-global.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+    <link
+        rel="stylesheet" href="css/tema.css"
+    >
+    <script src="js/tema.js"></script>
 </head>
 
 <body>
@@ -48,22 +59,22 @@
 
             <nav class="menu">
 
-                <a href="dashboard.html">
+                <a href="dashboard.php" class="active">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="carteira.html">
+                <a href="carteira.php">
                     <i class="bi bi-wallet2"></i>
                     <span>Carteira</span>
                 </a>
 
-                <a href="historico.html" class="active">
+                <a href="historico.php">
                     <i class="bi bi-clock-history"></i>
                     <span>Histórico</span>
                 </a>
 
-                <a href="aportes.html">
+                <a href="aportes.php">
                     <i class="bi bi-plus-circle"></i>
                     <span>Aportes</span>
                 </a>
@@ -73,12 +84,12 @@
                     <span>Relatórios</span>
                 </a>
 
-                <a href="Cursos.html">
+                <a href="Cursos.php">
                     <i class="bi bi-mortarboard"></i>
                     <span>Cursos</span>
                 </a>
 
-                <a href="perfil.html">
+                <a href="perfil.php">
                     <i class="bi bi-person"></i>
                     <span>Perfil</span>
                 </a>
@@ -210,134 +221,264 @@
     </aside>
 
 
-    <!-- MAIN -->
+    <!-- =========================
+         MAIN
+    ========================== -->
+
     <main class="main">
 
+
+        <!-- =========================
+             TOPBAR
+        ========================== -->
+
         <header class="topbar">
+
             <div>
-                <h1>Histórico</h1>
-                <p>Quinta-feira, 18 de junho de 2026</p>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Quinta-feira, 18 de junho de 2026
+                </p>
+
             </div>
+
         </header>
 
-        <section class="cards">
-            <div class="card">
-                <span>Total aportado</span>
-                <h3>R$ 41.200</h3>
-                <p>28 operações</p>
+
+        <!-- =========================
+             CARD PRINCIPAL
+        ========================== -->
+
+        <section class="card-big">
+
+            <div>
+
+                <span class="card-label">
+                    SALDO TOTAL DA CARTEIRA
+                </span>
+
+                <h2>
+                    R$ 48.392,17
+                </h2>
+
+
+                <div class="stats">
+
+                    <div>
+
+                        <p>
+                            Total investido
+                        </p>
+
+                        <strong>
+                            R$ 41.000,00
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <p>
+                            Saldo livre
+                        </p>
+
+                        <strong>
+                            R$ 3.200,00
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <p>
+                            Rendimento
+                        </p>
+
+                        <strong class="green">
+                            R$ 4.192,17
+                        </strong>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="card green">
-                <span>Ganho realizado</span>
-                <h3>R$ 3.840</h3>
-                <p>+3,8%</p>
+
+            <div class="badge">
+                ▲ +10,2% total
             </div>
 
-            <div class="card red">
-                <span>Perda realizada</span>
-                <h3>R$ 420</h3>
-                <p>-1,0%</p>
-            </div>
-
-            <div class="card">
-                <span>Resultado líquido</span>
-                <h3>R$ 3.420</h3>
-                <p class="green">+2,8% total</p>
-            </div>
         </section>
+
+
+        <!-- =========================
+             CARDS
+        ========================== -->
+
+        <section class="grid">
+
+
+            <!-- RENDA FIXA -->
+
+            <div class="card">
+
+                <div class="card-icon">
+
+                    <i class="bi bi-shield-check"></i>
+
+                </div>
+
+                <h4>
+                    Renda fixa
+                </h4>
+
+                <p>
+                    R$ 18.400
+                </p>
+
+                <span class="green">
+                    ▲ +0,8% mês
+                </span>
+
+            </div>
+
+
+            <!-- RENDA VARIÁVEL -->
+
+            <div class="card">
+
+                <div class="card-icon">
+
+                    <i class="bi bi-graph-up-arrow"></i>
+
+                </div>
+
+                <h4>
+                    Renda variável
+                </h4>
+
+                <p>
+                    R$ 21.600
+                </p>
+
+                <span class="green">
+                    ▲ +2,1% mês
+                </span>
+
+            </div>
+
+
+            <!-- CRIPTO -->
+
+            <div class="card">
+
+                <div class="card-icon">
+
+                    <i class="bi bi-currency-bitcoin"></i>
+
+                </div>
+
+                <h4>
+                    Cripto
+                </h4>
+
+                <p>
+                    R$ 5.192
+                </p>
+
+                <span class="green">
+                    ▲ +4,7% mês
+                </span>
+
+            </div>
+
+
+            <!-- INTERNACIONAL -->
+
+            <div class="card">
+
+                <div class="card-icon">
+
+                    <i class="bi bi-globe2"></i>
+
+                </div>
+
+                <h4>
+                    Internacional
+                </h4>
+
+                <p>
+                    R$ 3.200
+                </p>
+
+                <span class="red">
+                    ▼ -0,3% mês
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =========================
+             GRÁFICO
+        ========================== -->
 
         <section class="chart">
-            <h3>Rendimento mensal</h3>
-            <div class="chart-box">Gráfico</div>
-        </section>
 
-        <section class="table">
+            <div class="chart-header">
 
-            <div class="table-header">
-                <h3>Transações</h3>
+                <div>
 
-                <div class="filters">
-                    <button class="active">Todos</button>
-                    <button>Compra</button>
-                    <button>Venda</button>
-                    <button>Dividendo</button>
+                    <h3>
+                        Evolução da carteira
+                    </h3>
+
+                    <p>
+                        Acompanhe o crescimento dos seus investimentos
+                    </p>
+
                 </div>
+
+
+                <button class="chart-filter">
+
+                    Últimos 6 meses
+
+                    <i class="bi bi-chevron-down"></i>
+
+                </button>
+
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ativo</th>
-                        <th>Tipo</th>
-                        <th>Data</th>
-                        <th>Valor</th>
-                        <th>Retorno</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
 
-                <tbody>
+            <div class="chart-box">
 
-                    <tr>
-                        <td>PETR4</td>
-                        <td class="green">Compra</td>
-                        <td>12/06/2026</td>
-                        <td>R$ 7.480</td>
-                        <td class="green">+4,1%</td>
-                        <td><span class="status done">Concluída</span></td>
-                    </tr>
+                <div class="chart-placeholder">
 
-                    <tr>
-                        <td>Bitcoin</td>
-                        <td class="green">Compra</td>
-                        <td>05/06/2026</td>
-                        <td>R$ 4.814</td>
-                        <td class="green">+18,4%</td>
-                        <td><span class="status done">Concluída</span></td>
-                    </tr>
+                    <i class="bi bi-bar-chart-line"></i>
 
-                    <tr>
-                        <td>XPML11</td>
-                        <td>Dividendo</td>
-                        <td>01/06/2026</td>
-                        <td>R$ 89,60</td>
-                        <td class="green">+0,9%</td>
-                        <td><span class="status done">Concluída</span></td>
-                    </tr>
+                    <span>
+                        Gráfico da evolução da carteira
+                    </span>
 
-                    <tr>
-                        <td>VALE3</td>
-                        <td class="green">Compra</td>
-                        <td>22/05/2026</td>
-                        <td>R$ 9.855</td>
-                        <td class="red">-2,3%</td>
-                        <td><span class="status done">Concluída</span></td>
-                    </tr>
+                </div>
 
-                    <tr>
-                        <td>Ethereum</td>
-                        <td class="green">Compra</td>
-                        <td>10/05/2026</td>
-                        <td>R$ 7.190</td>
-                        <td class="green">+9,2%</td>
-                        <td><span class="status done">Concluída</span></td>
-                    </tr>
-
-                    <tr>
-                        <td>CDB Nubank</td>
-                        <td class="green">Compra</td>
-                        <td>01/05/2026</td>
-                        <td>R$ 5.000</td>
-                        <td class="green">+12,5%</td>
-                        <td><span class="status pending">Pendente</span></td>
-                    </tr>
-
-                </tbody>
-            </table>
+            </div>
 
         </section>
 
+
     </main>
+
 
 </div>
 
